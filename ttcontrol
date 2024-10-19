@@ -19,8 +19,8 @@ clean_server() {
     server_path="${server_dir}/${name}"
 
     echo "Cleaning files for '$name'..."
-    cmd="$tt_bin -cleanfiles -wd \"$server_path\""
-    su -c "$cmd" $tt_user
+    cmd="$tt_bin -cleanfiles -wd $server_path"
+    sudo -u $tt_user $cmd
 }
 
 # Create a new server skelleton
@@ -43,8 +43,8 @@ create_server() {
 
     # Hand over to TeamTalk wizard
     echo "Starting TeamTalk setup wizard for '$name'..."
-    cmd="$tt_bin -wizard -wd \"$server_path\""
-    su -c "$cmd" $tt_user
+    cmd="$tt_bin -wizard -wd $server_path"
+    sudo -u $tt_user $cmd
 }
 
 # Start a server
@@ -56,8 +56,8 @@ start_server() {
     if [ -f "$pid_file" ] && kill -0 $(cat "$pid_file") 2>/dev/null; then
         echo "$name is already running (PID: $(cat $pid_file))"
     else
-        cmd="$tt_bin -d -wd \"$server_path\" -pid-file \"$pid_file\""
-        su -c "$cmd" $tt_user
+        cmd="$tt_bin -d -wd $server_path -pid-file $pid_file"
+        sudo -u $tt_user $cmd
         echo "Started $name"
     fi
 }
