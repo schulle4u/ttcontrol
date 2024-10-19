@@ -1,0 +1,176 @@
+#!/bin/bash
+# TTControl
+# Copyright (C) 2024 Steffen Schultz
+
+# Configuration
+# TeamTalk binary and configuration paths
+tt_bin="/usr/local/bin/tt5srv"
+server_dir="/var/lib/teamtalk/servers"
+tt_user="teamtalk"
+
+# Get all server directories
+get_servers() {
+    find "$server_dir" -maxdepth 1 -mindepth 1 -type d -exec sh -c '[ -f "$1/tt5srv.xml" ] && basename "$1"' _ {} \;
+}
+
+# Clean abandoned files
+clean_server() {
+    name=$1
+    server_path="${server_dir}/${name}"
+
+    echo "Cleaning files for '$name'..."
+    cmd="$tt_bin -cleanfiles -wd \"$server_path\""
+    su -c "$cmd" $tt_user
+}
+
+# Create a new server skelleton
+create_server() {
+    name=$1
+    server_path="${server_dir}/${name}"
+
+    # Check if directory already exists
+    if [ -d "$server_path" ]; then
+        echo "Error: The directory for '$name' already exists."
+        exit 1
+    fi
+
+    # Create directories and set owner
+    mkdir -p "$server_path" || { echo "Error: Could not create directory '$server_path'."; exit 1; }
+    mkdir -p "$server_path/files" || { echo "Error: Could not create directory '$server_path/files'."; exit 1; }
+    chmod -R 774 "$server_path"
+    chown -R $tt_user:$tt_user "$server_path"
+    echo "Created directories '$server_path' and '$server_path/files'."
+
+    # Hand over to TeamTalk wizard
+    echo "Starting TeamTalk setup wizard for '$name'..."
+    cmd="$tt_bin -wizard -wd \"$server_path\""
+    su -c "$cmd" $tt_user
+}
+
+# Start a server
+start_server() {
+    name=$1
+    server_path="${server_dir}/${name}"
+    pid_file="$server_path/$name.pid"
+    
+    if [ -f "$pid_file" ] && kill -0 $(cat "$pid_file") 2>/dev/null; then
+        echo "$name is already running (PID: $(cat $pid_file))"
+    else
+        cmd="$tt_bin -d -wd \"$server_path\" -pid-file \"$pid_file\""
+        su -c "$cmd" $tt_user
+        echo "Started $name"
+    fi
+}
+
+# Stop a server
+stop_server() {
+    name=$1
+    server_path="${server_dir}/${name}"
+    pid_file="$server_path/$name.pid"
+    
+    if [ -f "$pid_file" ]; then
+        kill -TERM $(cat "$pid_file") && rm -f "$pid_file"
+        echo "Stopped $name"
+    else
+        echo "$name not running"
+    fi
+}
+
+# Restart a server
+restart_server() {
+    stop_server "$1"
+    start_server "$1"
+}
+
+# Get server status
+status_server() {
+    name=$1
+    server_path="${server_dir}/${name}"
+    pid_file="$server_path/$name.pid"
+    
+    if [ -f "$pid_file" ] && kill -0 $(cat "$pid_file") 2>/dev/null; then
+        echo "$name running (PID: $(cat $pid_file))"
+    else
+        echo "$name not running"
+    fi
+}
+
+# Clean files on all servers
+clean_all() {
+    for server in $(get_servers); do
+        clean_server "$server"
+    done
+}
+
+# Start all available servers
+start_all() {
+    for server in $(get_servers); do
+        start_server "$server"
+    done
+}
+
+# Stop all available servers
+stop_all() {
+    for server in $(get_servers); do
+        stop_server "$server"
+    done
+}
+
+# Check status of all servers
+status_all() {
+    for server in $(get_servers); do
+        status_server "$server"
+    done
+}
+
+# Process available commands
+case "$1" in
+    clean)
+        if [ -z "$2" ]; then
+            clean_all
+        else
+            clean_server "$2"
+        fi
+        ;;
+    create)
+        if [ -z "$2" ]; then
+            echo "Error: Please enter a server name."
+        else
+            create_server "$2"
+        fi
+        ;;
+    start)
+        if [ -z "$2" ]; then
+            start_all
+        else
+            start_server "$2"
+        fi
+        ;;
+    stop)
+        if [ -z "$2" ]; then
+            stop_all
+        else
+            stop_server "$2"
+        fi
+        ;;
+    restart)
+        if [ -z "$2" ]; then
+            stop_all
+            start_all
+        else
+            restart_server "$2"
+        fi
+        ;;
+    status)
+        if [ -z "$2" ]; then
+            status_all
+        else
+            status_server "$2"
+        fi
+        ;;
+    *)
+        echo "Syntax: $0 {clean|create|start|stop|restart|status} {server_name}"
+        echo "Available servers:"
+        get_servers
+        ;;
+esac
