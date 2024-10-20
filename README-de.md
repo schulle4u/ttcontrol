@@ -15,11 +15,16 @@ Da es bisher kaum öffentlich zugängliche Werkzeuge zur Verwaltung insbesondere
 4. Zugriffsrechte und Eigentümer für das TeamTalk-Verzeichnis setzen: `sudo chmod -R 774 /var/lib/teamtalk && sudo chown -R teamtalk:teamtalk /var/lib/teamtalk`
 5. Repository clonen oder in ein beliebiges Verzeichnis [herunterladen](https://github.com/schulle4u/ttcontrol/archive/refs/heads/main.zip).
 6. In der Datei `ttcontrol` falls gewünscht den Abschnitt `Configuration` anpassen.
-  * `tt_bin` = Pfad zur Binärdatei des TeamTalk-Servers (Standard: `/usr/local/bin/tt5srv`).
-  * `server_dir` = Pfad zum Hauptverzeichnis der Serverkonfigurationen, hier werden die jeweiligen Unterverzeichnisse angelegt (Standard: `/var/lib/teamtalk/servers`).
-  * `tt_user` = Benutzer, unter welchem die TeamTalk-Server laufen sollen (Standard: `teamtalk`).
 7. Falls noch nicht vorhanden, einen neuen Server anlegen: `sudo ./ttcontrol create Servername`
 8. Alle Server starten: `sudo ./ttcontrol start`
+
+## Konfiguration
+
+Die folgenden Optionen können angepasst werden: 
+
+* `tt_bin` = Pfad zur Binärdatei des TeamTalk-Servers (Standard: `/usr/local/bin/tt5srv`).
+* `server_dir` = Pfad zum Hauptverzeichnis der Serverkonfigurationen, hier werden die jeweiligen Unterverzeichnisse angelegt (Standard: `/var/lib/teamtalk/servers`).
+* `tt_user` = Benutzer, unter welchem die TeamTalk-Server laufen sollen (Standard: `teamtalk`).
 
 ## Syntax
 `sudo ./ttcontrol {create|start|stop|restart|status} {server_name}`

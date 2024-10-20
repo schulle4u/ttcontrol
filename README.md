@@ -15,11 +15,16 @@ Since there are only a few tools available for managing multiple TeamTalk server
 4. Set permissions and ownership for your servers directory: `sudo chmod -R 774 /var/lib/teamtalk && sudo chown -R teamtalk:teamtalk /var/lib/teamtalk`
 5. Clone this repository or [download](https://github.com/schulle4u/ttcontrol/archive/refs/heads/main.zip) to a desired directory.
 6. If needed, customize the `Configuration` section of the `ttcontrol` file.
-  * `tt_bin` = path to the TeamTalk server binary file (default: `/usr/local/bin/tt5srv`).
-  * server_dir` = path to the main directory for the server configurations; the subdirectories are created here (default: `/var/lib/teamtalk/servers`).
-  * `tt_user` = user under which the TeamTalk servers should run (default: `teamtalk`).
 7. If not already done, create a new server: `sudo ./ttcontrol create server_name`.
 8. Start all servers: `sudo ./ttcontrol start`.
+
+## Configuration
+
+The following options are available: 
+
+* `tt_bin` = path to the TeamTalk server binary file (default: `/usr/local/bin/tt5srv`).
+* `server_dir` = path to the main directory for the server configurations; the subdirectories are created here (default: `/var/lib/teamtalk/servers`).
+* `tt_user` = user under which the TeamTalk servers should run (default: `teamtalk`).
 
 ## Syntax
 `sudo ./ttcontrol {clean|create|start|stop|restart|status} {server_name}`.
@@ -28,7 +33,7 @@ The following commands are supported:
 
 * `clean {server_name}`: Clean all or specific servers from abandoned files.
 * `create {server_name}`: Create a new server, server name is mandatory.
-* `start {server_name}: Start all or specific servers.
+* `start {server_name}`: Start all or specific servers.
 * `stop {server_name}`: Stop all or specific servers.
 * `restart {server_name}`: Restarts all or specific servers.
 * `status {server_name}`: Get the running status of all or specific servers.
