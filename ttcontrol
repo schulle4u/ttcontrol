@@ -1,6 +1,8 @@
 #!/bin/bash
 # TTControl
 # Copyright (C) 2024 Steffen Schultz
+# This work has been released under the terms of the MIT license
+# See the file LICENSE for more details
 
 # Configuration
 # TeamTalk binary and configuration paths
