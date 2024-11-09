@@ -58,9 +58,9 @@ start_server() {
     if [ -f "$pid_file" ] && kill -0 $(cat "$pid_file") 2>/dev/null; then
         echo "$name is already running (PID: $(cat $pid_file))"
     else
+        echo "Starting $name..."
         cmd="$tt_bin -d -wd $server_path -pid-file $pid_file"
         sudo -u $tt_user $cmd
-        echo "Started $name"
     fi
 }
 
@@ -71,8 +71,8 @@ stop_server() {
     pid_file="$server_path/$name.pid"
     
     if [ -f "$pid_file" ]; then
+        echo "Stopping $name..."
         kill -TERM $(cat "$pid_file") && rm -f "$pid_file"
-        echo "Stopped $name"
     else
         echo "$name not running"
     fi
