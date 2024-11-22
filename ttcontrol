@@ -171,7 +171,7 @@ case "$1" in
         fi
         ;;
     *)
-        echo "Syntax: $0 {clean|create|start|stop|restart|status} {server_name}"
+        echo "Syntax: $0 {start|stop|restart|status|create|clean} {server_name}"
         echo "Available servers:"
         get_servers
         ;;

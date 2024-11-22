@@ -27,16 +27,16 @@ The following options are available:
 * `tt_user` = user under which the TeamTalk servers should run (default: `teamtalk`).
 
 ## Syntax
-`sudo ./ttcontrol {clean|create|start|stop|restart|status} {server_name}`.
+`sudo ./ttcontrol {start|stop|restart|status|create|clean} {server_name}`
 
 The following commands are supported: 
 
-* `clean {server_name}`: Clean all or specific servers from abandoned files.
-* `create {server_name}`: Create a new server, server name is mandatory.
 * `start {server_name}`: Start all or specific servers.
 * `stop {server_name}`: Stop all or specific servers.
 * `restart {server_name}`: Restarts all or specific servers.
 * `status {server_name}`: Get the running status of all or specific servers.
+* `create {server_name}`: Create a new server, server name is mandatory.
+* `clean {server_name}`: Clean all or specific servers from abandoned files.
 
 ## Development
 Copyright (C) 2024 Steffen Schultz, released under the terms of the MIT license: This software is not associated with TeamTalk or other products developed by BearWare.dk. Use at your own risk!
