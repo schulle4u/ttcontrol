@@ -38,10 +38,10 @@ create_server() {
 
     # Create directories and set owner
     mkdir -p "$server_path" || { echo "Error: Could not create directory '$server_path'."; exit 1; }
-    mkdir -p "$server_path/files" || { echo "Error: Could not create directory '$server_path/files'."; exit 1; }
+    mkdir -p "${server_path}/files" || { echo "Error: Could not create directory '${server_path}/files'."; exit 1; }
     chmod -R 774 "$server_path"
     chown -R $tt_user:$tt_user "$server_path"
-    echo "Created directories '$server_path' and '$server_path/files'."
+    echo "Created directories '${server_path}' and '${server_path}/files'."
 
     # Hand over to TeamTalk wizard
     echo "Starting TeamTalk setup wizard for '$name'..."
@@ -53,7 +53,7 @@ create_server() {
 start_server() {
     name=$1
     server_path="${server_dir}/${name}"
-    pid_file="$server_path/$name.pid"
+    pid_file="${server_path}/${name}.pid"
     
     if [ -f "$pid_file" ] && kill -0 $(cat "$pid_file") 2>/dev/null; then
         echo "$name is already running (PID: $(cat $pid_file))"
@@ -68,7 +68,7 @@ start_server() {
 stop_server() {
     name=$1
     server_path="${server_dir}/${name}"
-    pid_file="$server_path/$name.pid"
+    pid_file="${server_path}/${name}.pid"
     
     if [ -f "$pid_file" ]; then
         echo "Stopping $name..."
@@ -88,7 +88,7 @@ restart_server() {
 status_server() {
     name=$1
     server_path="${server_dir}/${name}"
-    pid_file="$server_path/$name.pid"
+    pid_file="${server_path}/${name}.pid"
     
     if [ -f "$pid_file" ] && kill -0 $(cat "$pid_file") 2>/dev/null; then
         echo "$name running (PID: $(cat $pid_file))"
