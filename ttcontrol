@@ -4,11 +4,34 @@
 # This work has been released under the terms of the MIT license
 # See the file LICENSE for more details
 
-# Configuration
-# TeamTalk binary and configuration paths
+script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+# Default configuration values
 tt_bin="/usr/local/bin/tt5srv"
 server_dir="/var/lib/teamtalk/servers"
 tt_user="teamtalk"
+
+# Load config file
+config_file=""
+if [ -e "/etc/ttcontrol.conf" ]; then
+    config_file="/etc/ttcontrol.conf"
+elif [ -e "$script_dir/ttcontrol.conf" ]; then
+    config_file="$script_dir/ttcontrol.conf"
+fi
+
+if [ -n "$config_file" ]; then
+    # Check if config file is readable
+    if [ -r "$config_file" ]; then
+        if grep -q -vE '^\s*(#|$|[a-zA-Z_][a-zA-Z0-9_]*=)' "$config_file"; then
+            echo "Error: Config file '$config_file' contains invalid lines." >&2
+            exit 1
+        fi
+        source "$config_file"
+    else
+        echo "Error: Cannot read config file '$config_file'." >&2
+        exit 1
+    fi
+fi
 
 # Get all server directories
 get_servers() {
@@ -172,7 +195,12 @@ case "$1" in
         ;;
     *)
         echo "Syntax: $0 {start|stop|restart|status|create|clean} {server_name}"
-        echo "Available servers:"
+        if [ -n "$config_file" ]; then
+            echo "Using script configuration file: '$config_file'"
+        else
+            echo "No script configuration file found, falling back to default values."
+        fi
+        echo "Available servers at '$server_dir':"
         get_servers
         ;;
 esac
