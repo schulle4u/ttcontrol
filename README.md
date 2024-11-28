@@ -14,13 +14,13 @@ Since there are only a few tools available for managing multiple TeamTalk server
 3. Create a home directory to store your server configurations (e.g. `sudo mkdir -p /var/lib/teamtalk/servers`). 
 4. Set permissions and ownership for your servers directory: `sudo chmod -R 774 /var/lib/teamtalk && sudo chown -R teamtalk:teamtalk /var/lib/teamtalk`
 5. Clone this repository or [download](https://github.com/schulle4u/ttcontrol/archive/refs/heads/main.zip) to a desired directory.
-6. If needed, customize the `Configuration` section of the `ttcontrol` file.
+6. Optional: Edit configuration values in the file `ttcontrol.conf`
 7. If not already done, create a new server: `sudo ./ttcontrol create server_name`.
 8. Start all servers: `sudo ./ttcontrol start`.
 
 ## Configuration
 
-The following options are available: 
+TTControl tries to find a configuration file under `/etc/ttcontrol.conf` or in the script directory. The default script configuration values will be used if no file can be found. The following options are available: 
 
 * `tt_bin` = path to the TeamTalk server binary file (default: `/usr/local/bin/tt5srv`).
 * `server_dir` = path to the main directory for the server configurations; the subdirectories are created here (default: `/var/lib/teamtalk/servers`).
