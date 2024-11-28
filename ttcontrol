@@ -32,6 +32,11 @@ if [ -n "$config_file" ]; then
         exit 1
     fi
 fi
+# Make sure we run with root previleges
+if [ ! "`whoami`" = "root" ]; then
+    echo "This script must be run as root."
+    exit 1
+fi
 
 # Get all server directories
 get_servers() {
