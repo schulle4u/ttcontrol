@@ -7,10 +7,14 @@ Controls multiple server instances of the TeamTalk voice conferencing software.
 
 Since there are only a few tools available for managing multiple TeamTalk servers on one system, I decieded to provide my own script here. This shell script offers functions to control one or more TeamTalk server instances. The usual commands for starting, restarting, stopping and querying the status are included. In addition, the directory structure for a new server can be created and passed to the setup wizard. The final setup assumes that each server runs in its own working directory. 
 
+## Installation
+
+On a fresh system you can clone or download the repository and type `sudo ./install` to install ttcontrol with the recommended settings. If you are dealing with an existing TeamTalk infrastructure you should either perform the recommended steps below manually or adjust the paths to your needs in the configuration.
+
 ## Recommended setup
 
 1. Download and install the latest [TeamTalk server binary](https://bearware.dk). 
-2. Create a system user under which the TeamTalk servers should run: `sudo adduser --system --group teamtalk`
+2. Create a system user under which the TeamTalk servers should run: `sudo useradd -r -s /bin/false teamtalk`
 3. Create a home directory to store your server configurations (e.g. `sudo mkdir -p /var/lib/teamtalk/servers`). 
 4. Set permissions and ownership for your servers directory: `sudo chmod -R 774 /var/lib/teamtalk && sudo chown -R teamtalk:teamtalk /var/lib/teamtalk`
 5. Clone this repository or [download](https://github.com/schulle4u/ttcontrol/archive/refs/heads/main.zip) to a desired directory.
