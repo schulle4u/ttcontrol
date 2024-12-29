@@ -12,13 +12,7 @@ config_dir="/etc"
 tt_user="teamtalk"
 server_dir="/var/lib/teamtalk"
 
-# Define some colors for better readibility
-green="\033[0;32m"
-red="\033[0;31m"
-yellow="\033[0;33m"
-nc="\033[0m" # No Color
-
-echo -e "${green}Starting installation process...${nc}"
+echo "Starting installation process.."
 
 # Confirmation function
 confirm() {
@@ -40,14 +34,14 @@ fi
 # Copy ttcontrol to desired location
 echo "Checking for existing ttcontrol script..."
 if [ -f "$prefix/ttcontrol" ]; then
-    echo -e "${yellow}A version of ttcontrol is already installed at $prefix/ttcontrol.${nc}"
+    echo "A version of ttcontrol is already installed at $prefix/ttcontrol."
     if confirm "Do you want to overwrite it?"; then
         echo "Creating backup..."
         cp "$prefix/ttcontrol" "$prefix/ttcontrol.bak"
         echo "Replacing ttcontrol with new version..."
         install -m 0755 ttcontrol "$prefix/ttcontrol"
     else
-        echo -e "${red}Skipping installation step.${nc}"
+        echo "Skipping installation step."
     fi
 else
     echo "Installing ttcontrol to $prefix"
@@ -57,14 +51,14 @@ fi
 # Install config file
 echo "Checking for existing configuration file..."
 if [ -f "$config_dir/ttcontrol.conf" ]; then
-    echo -e "${yellow}A configuration file already exists at $config_dir/ttcontrol.conf.${nc}"
+    echo "A configuration file already exists at $config_dir/ttcontrol.conf."
     if confirm "Do you want to overwrite it?"; then
         echo "Creating backup..."
         cp "$config_dir/ttcontrol.conf" "$config_dir/ttcontrol.bak"
         echo "Replacing ttcontrol.conf with new version..."
         install -m 0644 ttcontrol.conf "$config_dir/ttcontrol.conf"
     else
-        echo -e "${red}Skipping installation step.${nc}"
+        echo "Skipping installation step."
     fi
 else
     echo "Creating configuration file at $config_dir"
@@ -74,22 +68,22 @@ fi
 # Create a system user for teamtalk
 echo "Checking for system user $tt_user..."
 if id -u "$tt_user" >/dev/null 2>&1; then
-    echo -e "${green}User $tt_user already exists, skipping step.${nc}"
+    echo "User $tt_user already exists, skipping step."
 else
     echo "Creating system user $tt_user"
     useradd -r -s /bin/false "$tt_user"
-    echo -e "${green}User $tt_user created successfully.${nc}"
+    echo "User $tt_user created successfully."
 fi
 
 # Create server directory if applicable
 echo "Checking for server directory..."
 if [ -d "$server_dir" ]; then
-    echo -e "${green}Data directory $server_dir already exists, skipping step.${nc}"
+    echo "Data directory $server_dir already exists, skipping step."
 else
     echo "Creating server directory at $server_dir"
     mkdir -p "$server_dir/servers"
     chown -R "$tt_user:$tt_user" "$server_dir"
-    echo -e "${green}Server directory created and ownership set.${nc}"
+    echo "Server directory created and ownership set."
 fi
 
-echo -e "${green}Installation process completed successfully. Enter ttcontrol to see all available options.${nc}"
+echo "Installation process completed successfully. Enter ttcontrol to see all available options."
